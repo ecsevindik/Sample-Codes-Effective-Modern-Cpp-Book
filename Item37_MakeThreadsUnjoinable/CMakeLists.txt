@@ -10,4 +10,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   ${Utils_SOURCE_DIR}/include
   )
 
-
+if(UNIX)
+  target_link_libraries(${PROJECT_NAME} PUBLIC
+    pthread
+  )
+endif()

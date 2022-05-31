@@ -7,6 +7,7 @@
  */
 
 #include <future>
+#include <vector>
 
 #include "Chronometer.h"
 

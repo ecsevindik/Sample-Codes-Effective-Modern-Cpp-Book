@@ -11,3 +11,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   )
 
 
+if(UNIX)
+  target_link_libraries(${PROJECT_NAME} PUBLIC
+    pthread
+  )
+endif()

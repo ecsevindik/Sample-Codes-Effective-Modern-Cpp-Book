@@ -55,9 +55,9 @@ public:
     template<typename T>
     void processPointer(T* ptr)
     {}
-private:
-    template<> // Book says declaring template function in private does not compile. But it compiles :|
-    void processPointer<void>(void*);
+// private:
+//     template<> // Book says declaring template function in private does not compile. It does not compile with Gcc, but it compiles with clang
+//     void processPointer<void>(void*);
 };
 
 

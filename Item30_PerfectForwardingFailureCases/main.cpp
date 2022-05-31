@@ -50,7 +50,7 @@ void fwd2(Ts&&... params) {
 
 void test2() {
   f2(Widget::MinVals);
-  fwd2(Widget::MinVals); // Normally, this shouldn't link according to the book since it requires references to MinVals which is not defined here. However, it works with Clang 12.0.0 compiler.
+  // fwd2(Widget::MinVals); // With gcc compiler, this does not link since it requires references to MinVals which is not defined here. However, it works with Clang 12.0.0 compiler.
 }
 
 void f3(int pf(int)){

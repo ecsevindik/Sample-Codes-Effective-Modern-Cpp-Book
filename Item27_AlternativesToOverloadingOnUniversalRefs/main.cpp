@@ -19,12 +19,10 @@ using namespace std;
 
 std::multiset<std::string> names;
 
-// TAG DISPATCH
-template<typename T>
-void logAndAdd(T&& name) {
-    logAndAddImpl( std::forward<T>(name), 
-                   std::is_integral<std::remove_reference_t<T>>()
-    );
+void logAndAddImpl(int idx, std::true_type) {
+    auto now = std::chrono::steady_clock::now();
+    std::cout << now.time_since_epoch().count() << " - " << idx << std::endl;
+    names.emplace(std::to_string(idx));
 }
 
 template<typename T>
@@ -34,11 +32,12 @@ void logAndAddImpl(T&& name, std::false_type) {
     names.emplace(std::forward<T>(name));
 }
 
-
-void logAndAddImpl(int idx, std::true_type) {
-    auto now = std::chrono::steady_clock::now();
-    std::cout << now.time_since_epoch().count() << " - " << idx << std::endl;
-    names.emplace(std::to_string(idx));
+// TAG DISPATCH
+template<typename T>
+void logAndAdd(T&& name) {
+    logAndAddImpl( std::forward<T>(name), 
+                   std::is_integral<std::remove_reference_t<T>>()
+    );
 }
 
 void test1() {
