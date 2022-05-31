@@ -11,6 +11,7 @@ size of std::unique_ptr objects.
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 

@@ -38,6 +38,7 @@ std::shared_ptr and the last std::weak_ptr referring to it have been destroyed
 */
 
 #include <vector>
+#include <memory>
 
 #include "Chronometer.h"
 

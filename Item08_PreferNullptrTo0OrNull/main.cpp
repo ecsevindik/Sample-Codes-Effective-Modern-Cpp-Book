@@ -5,6 +5,7 @@
  */
 
 #include <mutex>
+#include <memory>
 
 using MuxGuard = std::lock_guard<std::mutex>;
 

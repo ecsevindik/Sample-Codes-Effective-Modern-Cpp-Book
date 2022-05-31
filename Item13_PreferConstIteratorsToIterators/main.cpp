@@ -8,6 +8,7 @@ rbegin, etc., over their member function counterparts.
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 namespace ecs {
     // C++11 does not have non-member cbegin function. It can be written this way.

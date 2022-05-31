@@ -8,6 +8,7 @@ prevention of std::shared_ptr cycles.
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include <memory>
 
 using namespace std;
 

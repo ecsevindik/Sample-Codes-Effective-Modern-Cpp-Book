@@ -36,6 +36,7 @@ moving of non-static data members. Generated only if the class contains no userd
 copy operations, move operations, or destructor.
 */
 
+#include <atomic>
 
 #include "Chronometer.h"
 

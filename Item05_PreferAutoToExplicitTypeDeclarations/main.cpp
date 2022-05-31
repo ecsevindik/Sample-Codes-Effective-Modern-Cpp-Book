@@ -37,7 +37,7 @@ specified types.
                          const std::unique_ptr<Widget>& p2)
                          { return *p1 < *p2; };
     
-    //**** The std::function approach is generally bigger and slower than the auto approach.
+    // **** The std::function approach is generally bigger and slower than the auto approach.
 */
 
 #include <iostream>

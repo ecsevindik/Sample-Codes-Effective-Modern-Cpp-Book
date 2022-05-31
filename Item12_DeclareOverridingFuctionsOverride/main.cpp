@@ -10,6 +10,7 @@ When override keyword is not used, the signatures of both base and derived class
 */
 
 #include <iostream>
+#include <memory>
 
 class Base {
 public:

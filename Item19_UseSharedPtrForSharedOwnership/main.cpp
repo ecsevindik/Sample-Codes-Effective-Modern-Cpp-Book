@@ -14,6 +14,7 @@ The type of the deleter has no effect on the type of the std::shared_ptr.
 #include <string>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
