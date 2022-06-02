@@ -33,9 +33,9 @@ void test1() {
 }
 
 template<typename C, typename V>
-void findAndInsert( C& container, // in container, find
-                    const V& targetVal, // first occurrence
-                    const V& insertVal) // of targetVal, then insert insertVal there
+void findAndInsert( C& container, // in container, find first occurrence of targetVal, then insert insertVal there
+                    const V& targetVal,
+                    const V& insertVal)
 {
     using std::cbegin;
     using std::cend;
