@@ -13,7 +13,7 @@ of C++’s type deduction rules remains essential.
 template <typename T> // Declaration only for TD; TD == "Type Displayer"
 class TD;
 
-void test1() {
+void testTypeId() {
     const int theAnswer = 42;
 
     auto x = theAnswer;
@@ -43,10 +43,11 @@ std::vector<Widget> createVec() {
     return v;
 }
 
-void test2() {
+void testBoostTypeIndex() {
     const auto vw = createVec();
     if(!vw.empty()) {
         typeInfo(&vw[0]);
+
         /*
         Sadly, the results of std::type_info::name are not reliable. In this case, for example,
         the type that all three compilers report for param are incorrect. Furthermore,
@@ -57,6 +58,7 @@ void test2() {
         const (or volatile), its constness (or volatileness) is also ignored. That’s why
         param’s type—which is const Widget * const &—is reported as const Widget*.
         */
+
         // TD<decltype(&vw[0])> t; // This one is also wrong
         getTypeConstRef(&vw[0]); // Result of Boost.TypeIndex is accurate
     }
@@ -64,7 +66,10 @@ void test2() {
 
 int main() {
 
-    test1();
-    test2();
+    std::cout << "Test type id:" << std::endl;
+    testTypeId();
+    
+    std::cout << std::endl << "Test boost typeindex:" << std::endl;
+    testBoostTypeIndex();
     return 0;
 }
