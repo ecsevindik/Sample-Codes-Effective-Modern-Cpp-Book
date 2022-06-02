@@ -45,54 +45,68 @@ int sum1{ x + y + z }; // error! sum of doubles may not be expressible as int
 int sum2(x + y + z); // okay (value of expression truncated to an int)
 int sum3 = x + y + z; // ditto
 
-************* if you try to call a Widget constructor with zero arguments using the analogous syntax, you declare a function instead of an object
-Widget w1(10); // call Widget ctor with argument 10
-Widget w2(); // most vexing parse! declares a function named w2 that returns a Widget!
-Widget w3{}; // calls Widget ctor with no args
 
-************* Problem with std::intializer_list
-class Widget {
-public:
-    Widget(int i, bool b);
-    Widget(int i, double d); 
-    Widget(std::initializer_list<long double> il); // added
-
-    operator float() const; // convert to float
-    ...
-};
-
-Widget w1(10, true); // uses parens and, as before, calls first ctor
-Widget w2{10, true}; // uses braces, but now calls std::initializer_list ctor (10 and true convert to long double)
-Widget w3(10, 5.0); // uses parens and, as before, calls second ctor
-Widget w4{10, 5.0}; // uses braces, but now calls std::initializer_list ctor (10 and 5.0 convert to long double)
-
-Widget w5(w4); // uses parens, calls copy ctor
-Widget w6{w4}; // uses braces, calls std::initializer_list ctor (w4 converts to float, and float converts to long double)
-Widget w7(std::move(w4)); // uses parens, calls move ctor
-Widget w8{std::move(w4)}; // uses braces, calls std::initializer_list ctor (for same reason as w6)
 
 *** Only if there’s no way to convert the types of the arguments in a braced initializer to
 the type in a std::initializer_list do compilers fall back on normal overload
 resolution.
 
-// std::initializer_list element type is now std::string
-Widget(std::initializer_list<std::string> il);
-… // no implicit
-
 *** Empty braces mean no arguments, not
 an empty std::initializer_list:
 
-Widget w1; // calls default ctor
-Widget w2{}; // also calls default ctor
-Widget w3(); // most vexing parse! declares a function!
-Widget w4({}); // calls std::initializer_list ctor with empty list
-Widget w5{{}}; // ditto
 */
 
 
 #include <iostream>
 
+class Widget {
+public:
+    Widget() {
+        std::cout << "Ctor with no args is called" << std::endl;
+    }
+    Widget(int i, bool b) {
+        std::cout << "Ctor with (int,bool) is called" << std::endl;
+    }
+    Widget(int i, double d) {
+        std::cout << "Ctor with (int,double) is called" << std::endl;
+    }
+    Widget(std::initializer_list<long double> il) {
+        std::cout << "Ctor with (std::initializer_list<long double>) is called" << std::endl;
+    }
+
+    Widget(const Widget& rhs) {
+        std::cout << "Copy constructor is called" << std::endl;
+    }
+
+    Widget(Widget&& rhs) {
+        std::cout << "Move constructor is called" << std::endl;
+    }
+
+    operator float() const { // convert to float
+        return 3.f;
+    }
+    
+};
+
 int main() {
-    std::cerr << "This item has no sample code" << std::endl;
+    Widget w1; // calls default ctor
+    Widget w2{}; // also calls default ctor
+    // Widget w3(); // most vexing parse! declares a function!
+    Widget w4({}); // calls std::initializer_list ctor with empty list
+    Widget w5{{}}; // ditto
+    
+    std::cout << std::endl;
+
+    Widget w6(10, true); // uses parens and, calls first ctor
+    Widget w7{10, true}; // uses braces, but now calls std::initializer_list ctor (10 and true convert to long double)
+    Widget w8(10, 5.0); // uses parens and, as before, calls second ctor
+    Widget w9{10, 5.0}; // uses braces, but now calls std::initializer_list ctor (10 and 5.0 convert to long double)
+
+    std::cout << std::endl;
+
+    Widget w10(w4); // uses parens, calls copy ctor
+    Widget w11{w4}; // uses braces, calls std::initializer_list ctor (w4 converts to float, and float converts to long double)
+    Widget w12(std::move(w4)); // uses parens, calls move ctor
+    Widget w13{std::move(w5)}; // uses braces, calls std::initializer_list ctor (for same reason as w6)
     return 0;
 }
