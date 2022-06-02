@@ -32,8 +32,8 @@ processWidget(std::make_shared<Widget>(),   // no potential
 As long as std::weak_ptrs refer to a control block (i.e., the weak count is greater
 than zero), that control block must continue to exist. And as long as a control block
 exists, the memory containing it must remain allocated. The memory allocated by a
-std::shared_ptr make function, then, can’t be deallocated until the last
-std::shared_ptr and the last std::weak_ptr referring to it have been destroyed
+std::shared_ptr make function (which holds the memory of object and control block together), then, can’t be deallocated until the last
+std::shared_ptr and the last std::weak_ptr referring to it have been destroyed.
 
 */
 
@@ -51,8 +51,9 @@ private:
     int m_id;
 };
 
-void test1() {
+void speedTest() {
     std::vector<std::shared_ptr<Widget>> vec1;
+    vec1.reserve(1000);
 
     utils::Chronometer ch;
     ch.Start();
@@ -61,6 +62,8 @@ void test1() {
     }
     ch.Stop();
     ch.Report("Make shared - ");
+
+    vec1.clear();
 
     ch.Start();
     for(int i = 0; i < 1000; ++i) {
@@ -71,6 +74,6 @@ void test1() {
 }
 
 int main() {
-    test1();
+    speedTest();
     return 0;
 }
