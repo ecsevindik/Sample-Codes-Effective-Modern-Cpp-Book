@@ -39,9 +39,11 @@ void case1() {
     const int *px = &x; // px is a ptr to x as a const int
     getTypePointer(&x); // T is int, param's type is int*
     getTypePointer(px); // T is const int, param's type is const int*
+    getTypeConstPointer(&x); // T is int, param's type is const int*
+    getTypeConstPointer(px); // T is int, param's type is const int*
     
-    getTypeRef(px); // T is const int *, param's type is & const int *
-    getTypeConstRef(px); // T is const int *, param's type is const & const int *
+    getTypeRef(px); // T is const int *, param's type is const int* &
+    getTypeConstRef(px); // T is const int *, param's type is const int * & const
     getTypeByValue(px); // T is const int *, param's type is const int *
 }
 
@@ -96,6 +98,7 @@ void arrayArguments() {
     std::cout << "Array size = " << arraySize(name) << std::endl;
 }
 
+// Dummy function
 void someFunc(int, double) {}
 
 // Function types can decay into function pointers
