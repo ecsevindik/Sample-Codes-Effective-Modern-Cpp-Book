@@ -23,9 +23,9 @@ struct MyAllocList {
 MyAllocList<Widget>::type lw; // client code
 
 template<typename T>
-class Widget { // Widget<T> contains
-private: // a MyAllocList<T>
-    typename MyAllocList<T>::type list; // as a data member
+class Widget { // Widget<T> contains a MyAllocList<T> as a data member
+private:
+    typename MyAllocList<T>::type list;
     …
 };
 
@@ -33,6 +33,7 @@ private: // a MyAllocList<T>
 
 template<typename T>
 using MyAllocList = std::list<T, MyAlloc<T>>; // as before
+
 template<typename T>
 class Widget {
 private:
