@@ -20,23 +20,23 @@ forward-declared only if their declaration specifies an underlying type.
 enum ColorUnscoped { black, white, red };
 enum class ColorScoped{ green, blue, gray };
 
-void test1() {
+void basicTest() {
     
     ColorScoped c = ColorScoped::blue;
     // ColorScoped sc = gray; // error
 
     auto white = false;
-    auto red = true; // This should have given error according to the book
+    auto red = true; // This should have given error according to the book but works both for gcc and clang
     // ColorUnscoped uc = white; // error
     ColorUnscoped uc = black;
 }
 
 std::vector<std::size_t> primeFactors(std::size_t x) { // func. returning prime factors of x
-    std::cout << x << std::endl;
+    std::cout << "primeFactors function, x is " << x << std::endl;
     return std::vector<std::size_t>();
 }
 
-void test2() {
+void castingTest() {
     ColorUnscoped uc = red;
     ColorScoped sc = ColorScoped::blue;
 
@@ -53,7 +53,7 @@ void test2() {
     }
 }
 
-void test3() {
+void forwardDeclarationTest() {
     Status s = Status::good;
     Color c = brown;
     continueProcessing(s, c);
@@ -65,14 +65,14 @@ enum UserInfoFields {uiName, uiEmail, uiReputation};
 
 enum class UserInfoFieldsScoped {uiName, uiEmail, uiReputation};
 
-template<typename E> // C++14
+template<typename E> // C++14, underlying typecasting function
 constexpr auto
 toUType(E enumerator) noexcept
 {
     return static_cast<std::underlying_type_t<E>>(enumerator);
 }
 
-void test4() {
+void typecastingTest() {
     UserInfo uInfo;
     auto val1 =std::get<1>(uInfo);
     auto val2 = std::get<uiEmail>(uInfo);
@@ -82,9 +82,9 @@ void test4() {
 }
 
 int main() {
-    test1();
-    test2();
-    test3();
-    test4();
+    basicTest();
+    castingTest();
+    forwardDeclarationTest();
+    typecastingTest();
     return 0;
 }
