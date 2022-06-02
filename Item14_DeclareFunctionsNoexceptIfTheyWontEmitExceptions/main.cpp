@@ -17,8 +17,7 @@ RetType function(params) throw(); // less optimizable
 RetType function(params); // less optimizable
 
 template <class T, size_t N>
-void swap(T (&a)[N], // see below
-          T (&b)[N]) noexcept(noexcept(swap(*a, *b)));
+void swap(T (&a)[N],T (&b)[N]) noexcept(noexcept(swap(*a, *b)));
 
 template <class T1, class T2>
 struct pair {
@@ -50,16 +49,16 @@ public:
     Widget() = default;
     ~Widget() = default;
 
-    Widget(Widget&& rhs) noexcept(false)
+    Widget(Widget&& rhs) noexcept(false) // Move constructor
     : a(std::move(rhs.a)) {}
 
-    Widget& operator=(Widget&& rhs) noexcept(false) {
+    Widget& operator=(Widget&& rhs) noexcept(false) { // Move assignment
         a = std::move(rhs.a);
         return *this;
     }
 
-    Widget(const Widget& rhs) : a(rhs.a) {}
-    Widget& operator=(const Widget& rhs) {
+    Widget(const Widget& rhs) : a(rhs.a) {} // Copy constructor
+    Widget& operator=(const Widget& rhs) { // Copy assignment
         a = rhs.a;
         return *this;
     }
@@ -73,15 +72,15 @@ public:
     WidgetNoExcept() = default;
     ~WidgetNoExcept() = default;
 
-    WidgetNoExcept(WidgetNoExcept&& rhs) noexcept
+    WidgetNoExcept(WidgetNoExcept&& rhs) noexcept // Move constructor
     : a(std::move(rhs.a)) {}
-    WidgetNoExcept& operator=(WidgetNoExcept&& rhs) noexcept {
+    WidgetNoExcept& operator=(WidgetNoExcept&& rhs) noexcept { // Move assignment
         a = std::move(rhs.a);
         return *this;
     }
 
-    WidgetNoExcept(const WidgetNoExcept& rhs) : a(rhs.a) {}
-    WidgetNoExcept& operator=(const WidgetNoExcept& rhs) {
+    WidgetNoExcept(const WidgetNoExcept& rhs) : a(rhs.a) {} // Copy constructor
+    WidgetNoExcept& operator=(const WidgetNoExcept& rhs) { // Copy assignment
         a = rhs.a;
         return *this;
     }
@@ -92,7 +91,7 @@ private:
 int main() {
 
     std::vector<Widget> vec1;
-    vec1.reserve(100);
+    vec1.reserve(100); // Vector reserve size is intentionally left small in order to make vector increase its size and copy/move its alements to new memory
 
     std::vector<WidgetNoExcept> vec2;
     vec2.reserve(100);
@@ -113,8 +112,6 @@ int main() {
     }
     ch.Stop();
     ch.Report("Noexcept false ");
-
-
 
     return 0;
 }
