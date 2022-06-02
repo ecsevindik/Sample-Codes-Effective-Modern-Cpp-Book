@@ -29,10 +29,10 @@ std::vector<bool> feat() {
 int main() {
     
     auto h1 = feat()[1]; // h1 type is not bool, it is std::vector<bool>::reference which is a hidden proxy for packed bits
-    getTypeRef(h1); 
+    std::cout << "h1's type = " << type_id_with_cvr<decltype(h1)>().pretty_name() << std::endl << std::endl;
 
     auto h2 = static_cast<bool>(feat()[0]); // Now, h2 type is bool
-    getTypeRef(h2);
+    std::cout << "h2's type = " << type_id_with_cvr<decltype(h2)>().pretty_name() << std::endl << std::endl;
 
     return 0;
 }
