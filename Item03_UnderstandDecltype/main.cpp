@@ -36,7 +36,7 @@ initializer, but it performs the type deduction using the decltype rules.
 
 /*
 template<typename Container, typename Index> // works, but requires refinement
-auto authAndAccess(Container& c, Index i) -> decltype(c[i]) // Here, auto is not use for template type deduction, it is used with trailing return type syntax (-->)
+auto authAndAccess(Container& c, Index i) -> decltype(c[i]) // Here, auto is not use for template type deduction, it is used with trailing return type syntax (->)
 {
     authenticateUser();
     return c[i];
@@ -67,14 +67,30 @@ int main() {
     d.emplace_back(5);
     // authAndAccessWrong(d, 1) = 10; // Won't compile. Assignment to an rvalue is forbidden;
     authAndAccessCorrect(d, 1) = 10;
-    std::cout << authAndAccessCorrect(d, 1) << std::endl;
+
+    if(authAndAccessCorrect(d,1) != 10) {
+        std::cerr << "Wrong result on authAndAccessCorrect(d,1)" << std::endl;
+    } else {
+        std::cout << "Expected result = 10, actual result = " << authAndAccessCorrect(d,1) << std::endl;
+    }
+
 
     auto x = authAndAccessCorrect(d,0); // type of x is int
     x = 123; // no effect on container
-    std::cout << authAndAccessCorrect(d, 0) << std::endl;
+    if(authAndAccessCorrect(d,0) != 3) {
+        std::cerr << "Wrong result on authAndAccessCorrect(d,0)" << std::endl;
+    } else {
+        std::cout << "Expected result = 3, actual result = " << authAndAccessCorrect(d,0) << std::endl;
+    }
+
+
     decltype(auto) y = authAndAccessCorrect(d,0); // type of y is int&
     y = 124; // affects the container since it is a reference
-    std::cout << authAndAccessCorrect(d, 0) << std::endl;
+    if(authAndAccessCorrect(d,0) != 124) {
+        std::cerr << "Wrong result on authAndAccessCorrect(d,0)" << std::endl;
+    } else {
+        std::cout << "Expected result = 124, actual result = " << authAndAccessCorrect(d,0) << std::endl;
+    }
 
     return 0;
 }
