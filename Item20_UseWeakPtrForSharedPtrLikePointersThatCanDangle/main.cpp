@@ -21,7 +21,7 @@ private:
     int m_id;
 };
 
-void test1() {
+void weakPtrTest() {
     auto spw =std::make_shared<Widget>(3); // after spw is constructed, the pointed-to Widget's ref count (RC) is 1.
 
     std::weak_ptr<Widget> wpw(spw); // wpw points to same Widget  as spw. RC remains 1
@@ -33,14 +33,14 @@ void test1() {
     }
 }
 
-void test2() {
+void badWeakPtrTest() {
     auto spw1 =std::make_shared<Widget>(3);
 
     std::weak_ptr<Widget> wpw(spw1);
 
     spw1 = nullptr;
 
-    auto spw2 = wpw.lock(); // If wpw1 has expired, spw1 is null
+    auto spw2 = wpw.lock(); // If wpw1 has expired, spw2 is null
 
     try {
         std::shared_ptr<Widget> spw3(wpw); // Expected to throw bad_weak_ptr
@@ -57,9 +57,9 @@ std::shared_ptr<const Widget> loadWidget(int id) {
 std::shared_ptr<const Widget> fastLoadWidget(int id) {
     static std::unordered_map<int, std::weak_ptr<const Widget>> cache;
 
-    auto objPtr = cache[id].lock();
+    auto objPtr = cache[id].lock(); // look at the cache if Widget is created before
 
-    if(!objPtr) {
+    if(!objPtr) { // If not, create new one
         objPtr = loadWidget(id);
         cache[id] = objPtr;
     }
@@ -67,15 +67,15 @@ std::shared_ptr<const Widget> fastLoadWidget(int id) {
     return objPtr;
 }
 
-void test3() {
+void cacheTest() {
     auto spw1 = fastLoadWidget(4);
     auto spw2 = fastLoadWidget(5);
     auto spw3 = fastLoadWidget(5); // Destructor of 5 is called only once since it is cached
 }
 
 int main() {
-    test1();
-    test2();
-    test3();
+    weakPtrTest();
+    badWeakPtrTest();
+    cacheTest();
     return 0;
 }
