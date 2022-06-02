@@ -54,10 +54,18 @@ void test1() {
 
     int x = 3;
     int y = 4;
-    // std::array<int, ecs::pow(x, y)> results2; // Does not compile since std::array needs compile-time constant while pow provides runtime value
+    // std::array<int, ecs::pow(x, y)> results2; // Does not compile since std::array needs compile-time constant while here pow provides runtime value
     std::cout << ecs::pow(x, y) << std::endl;
 }
 
+/*
+
+constexpr functions are limited to taking and returning literal types, which essen‐
+tially means types that can have values determined during compilation. In C++11, all
+built-in types except void qualify(in C++14 this restriction is lifted), but user-defined types may be literal, too, because
+constructors and other member functions may be constexpr:
+
+*/
 class Point {
 public:
     constexpr Point(double xVal = 0, double yVal = 0) noexcept
@@ -75,8 +83,8 @@ private:
 constexpr
 Point midpoint(const Point& p1, const Point& p2) noexcept
 {
-    return { (p1.xValue() + p2.xValue()) / 2, // call constexpr
-                (p1.yValue() + p2.yValue()) / 2 }; // member funcs
+    return { (p1.xValue() + p2.xValue()) / 2, // call constexpr member funcs
+                (p1.yValue() + p2.yValue()) / 2 };
 }
 
 // return reflection of p with respect to the origin (C++14)
@@ -93,9 +101,10 @@ void test2() {
     constexpr Point p2(28.8, 5.3); // also fine
     constexpr auto mid = midpoint(p1, p2); // init constexpr object w/result of constexpr function
     constexpr auto reflectedMid = reflection(mid); // reflectedMid's value is (-19.1 -16.5) and known during compilation
+    std::cout << "Reflected mid is " << reflectedMid.xValue() << "," << reflectedMid.yValue() << std::endl;
 
-    std::array<int, static_cast<int>(mid.xValue())> results;
-    std::cout << results.size() << std::endl;
+    std::array<int, static_cast<int>(mid.xValue())> results; // array needs compile time constant for initialization
+    std::cout << "Result size is " << results.size() << std::endl;
 }
 
 int main() {
