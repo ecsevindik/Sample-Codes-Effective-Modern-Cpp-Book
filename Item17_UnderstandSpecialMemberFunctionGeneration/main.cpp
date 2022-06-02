@@ -16,16 +16,20 @@
 
 /*
 The C++11 rules governing the special member functions are thus:
+
 • Default constructor: Same rules as C++98. Generated only if the class contains
 no user-declared constructors.
+
 • Destructor: Essentially same rules as C++98; sole difference is that destructors
 are noexcept by default (see Item 14). As in C++98, virtual only if a base class
 destructor is virtual.
+
 • Copy constructor: Same runtime behavior as C++98: memberwise copy construction
 of non-static data members. Generated only if the class lacks a userdeclared
 copy constructor. Deleted if the class declares a move operation.
 Generation of this function in a class with a user-declared copy assignment operator
 or destructor is deprecated.
+
 • Copy assignment operator: Same runtime behavior as C++98: memberwise
 copy assignment of non-static data members. Generated only if the class lacks a
 user-declared copy assignment operator. Deleted if the class declares a move
@@ -84,7 +88,9 @@ int main() {
     Widget w1, w2; // Default constructor
     Widget w3(w1); // Copy constructor
     w2 = w3; // Copy assignment 
-    Widget w4(std::move(w2)); // move constructor
-    w4 = std::move(w1); // move assignment
+
+    Widget w4(std::move(w2)); // move constructor. If the move operations are not defined while copy operations are, this line becomes copy constructor
+    w4 = std::move(w1); // move assignment. If the move operations are not defined while copy operations are, this line becomes copy assignment
+
     return 0;
 }
