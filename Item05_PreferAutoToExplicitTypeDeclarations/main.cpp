@@ -52,8 +52,8 @@ int main() {
     auto x3 = 0; // fine, x's value is well-defined
 
     std::unordered_map<std::string, int> m;
-    m.emplace("abc", 123);
-    m.emplace("def", 456);
+    m.emplace("abc", x1);
+    m.emplace("def", x3);
 
     
     // for(std::pair<std::string, int>& p : m) {} // Error since each pair in m has a type of std::pair<const std::string, int>
@@ -65,7 +65,9 @@ int main() {
         p.second = 3;
     }
 
-     for(auto& p: m) {
+    std::cout << std::endl;
+
+    for(const auto& p: m) {
         std::cout << p.second << std::endl;
     }
 
