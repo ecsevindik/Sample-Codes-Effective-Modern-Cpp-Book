@@ -39,16 +39,23 @@ public:
     RealEstate(int x) :Investment(x) {}
 };
 
-// Custom deleter
+// Custom deleter as stateless lambda
 auto delInvmt = [] (Investment* pInvestment) {
     std::cout << "Deleting " << pInvestment->m_x << std::endl;
     delete pInvestment;
 };
 
+// Custom deleter as function
+void delInvmt2(Investment* pInvestment) {
+    std::cout << "Deleting2 " << pInvestment->m_x << std::endl;
+    delete pInvestment;
+}
+
 template< typename... Ts>
 auto makeInvestmentWithCustomDel(InvestmentType type, Ts&&... params) {
 
     std::unique_ptr<Investment, decltype(delInvmt)> pInv(nullptr, delInvmt); // ptr to be returned
+    // std::unique_ptr<Investment, void(*)(Investment*)> pInv(nullptr, delInvmt2); // for delInvmt2
 
     if(type == InvestmentType::Stock) {
         pInv.reset(new Stock(std::forward<Ts>(params)...));
@@ -83,7 +90,7 @@ int main() {
     // Convert unique_ptr to shared_ptr
     std::shared_ptr<Investment> sp = makeInvestmentWithCustomDel(InvestmentType::RealEstate, 5);
 
-    auto invt3 = makeInvestment(InvestmentType::Bond, 3);
+    auto invt3 = makeInvestment(InvestmentType::Bond, 3); // This line will not print anything since it is not defined with custom del
 
     return 0;
 }
