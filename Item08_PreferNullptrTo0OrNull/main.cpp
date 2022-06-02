@@ -23,17 +23,17 @@ void test1() {
     
     {
         MuxGuard g(f1m); // lock mutex for f1
-        auto result = f1(0); // pass 0 as null ptr to f1
+        f1(0); // pass 0 as null ptr to f1
     } // unlock mutex
 
     {
         MuxGuard g(f2m); // lock mutex for f2
-        auto result = f2(NULL); // pass NULL as null ptr to f2
+        f2(NULL); // pass NULL as null ptr to f2
     } // unlock mutex
 
     {
         MuxGuard g(f3m); // lock mutex for f3
-        auto result = f3(nullptr); // pass nullptr as null ptr to f3
+        f3(nullptr); // pass nullptr as null ptr to f3
     } // unlock mutex
 }
 
@@ -51,9 +51,9 @@ decltype(auto) lockAndCall(FuncType func,
 void test2() {
     std::mutex f1m, f2m, f3m; // mutexes for f1, f2, and f3
 
-    // auto result1 = lockAndCall(f1, f1m, 0); // error! uncomment to see error
-    // auto result2 = lockAndCall(f2, f2m, NULL); // error! uncomment to see error
-    auto result3 = lockAndCall(f3, f3m, nullptr); // fine
+    // auto result1 = lockAndCall(f1, f1m, 0); // error since 0 is deduced as integral type int. uncomment to see error
+    // auto result2 = lockAndCall(f2, f2m, NULL); // error since 0 is deduced as integral type int. uncomment to see error
+    lockAndCall(f3, f3m, nullptr); // fine
 }
 
 int main() {
