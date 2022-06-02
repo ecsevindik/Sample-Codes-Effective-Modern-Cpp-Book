@@ -6,8 +6,32 @@ rvalue objects (*this) differently.
  */
 
 /*
-When override keyword is not used, the signatures of both base and derived class functions must be exactly same
+***** When override keyword is not used, the signatures of both base and derived class functions must be exactly same
+
+class Base {
+public:
+virtual void mf1() const;
+virtual void mf2(int x);
+virtual void mf3() &;
+void mf4() const;
+};
+class Derived: public Base {
+public:
+virtual void mf1();
+virtual void mf2(unsigned int x);
+virtual void mf3() &&;
+void mf4() const;
+};
+
+None of the funcs in Derived overrides funcs in Base class.
+• mf1 is declared const in Base, but not in Derived.
+• mf2 takes an int in Base, but an unsigned int in Derived.
+• mf3 is lvalue-qualified in Base, but rvalue-qualified in Derived.
+• mf4 isn’t declared virtual in Base.
+
 */
+
+
 
 #include <iostream>
 #include <memory>
@@ -18,7 +42,7 @@ public:
         std::cout << "Base class function called" << std::endl;
     }
 
-    virtual void doSomething() & {
+    virtual void doSomething() & { // this version of doSomething applies only when *this is an lvalue
         std::cout << "Base class doSomething & function called" << std::endl;
     }
 
@@ -33,11 +57,11 @@ public:
         std::cout << "Derived class doWork function called" << std::endl;
     }
 
-    void doSomething() & override {
+    void doSomething() & override { // this version of doSomething applies only when *this is an lvalue
         std::cout << "Derived class doSomething & function called" << std::endl;
     }
 
-    void doSomething() && {
+    void doSomething() && { // this version of doSomething applies only when *this is an rvalue
         std::cout << "Derived class doSomething && function called" << std::endl;
     }
 
@@ -50,7 +74,8 @@ Widget makeWidget() {
     return Widget();
 }
 
-void test1() {
+int main() {
+
     std::unique_ptr<Base> upb = std::make_unique<Widget>();
     upb->doWork(); // Calls derived class doSomething
 
@@ -64,9 +89,6 @@ void test1() {
 
     upb->func(x); // Calls base class func
     w.func(y); // Calss derived class func
-}
 
-int main() {
-    test1();
     return 0;
 }
