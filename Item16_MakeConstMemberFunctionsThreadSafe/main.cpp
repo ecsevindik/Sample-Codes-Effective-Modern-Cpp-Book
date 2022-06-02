@@ -21,7 +21,7 @@ int expensiveComputation() {
 class Widget {
 public:
     Widget() = default;
-    int magicValue() const
+    int magicValue() const // const function
     {
         std::lock_guard<std::mutex> guard(m); // lock m
         if (cacheValid) return cachedValue;
@@ -36,8 +36,8 @@ public:
 
 private:
     mutable std::mutex m; // mutable keyword helps to change member variables in a const member functions
-    mutable int cachedValue; // no longer atomic
-    mutable bool cacheValid{ false }; // no longer atomic
+    mutable int cachedValue; // no need to be atomic
+    mutable bool cacheValid{ false }; // no need to be atomic
 };
 
 int main() {
