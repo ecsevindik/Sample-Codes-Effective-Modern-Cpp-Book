@@ -58,16 +58,17 @@ bool doWork(std::function<bool(int)> filter, int maxVal = tenMillion, bool sleep
         ThreadRAII::DtorAction::join
     );
 
-    auto nh = t.get().native_handle();
+    auto nh = t.get().native_handle(); // returns pthread_t for linux
 
     if(sleep)
         std::this_thread::sleep_for(100ms);
     
     if(flag == true) {
-        t.get().join();
-        std::cout << goodVals.size() << std::endl;
+        t.get().join(); // If flag is true, thread is joined here. ThreadRAII destructor will be called with unjoinable thread, therefore, it will not print anything
+        std::cout << "Goodvals size = " << goodVals.size() << std::endl;
         return true;
     }
+    // if flag is false, ThreadRAII destructor will print 
 
     return false;
 }
@@ -80,11 +81,12 @@ bool filter(int i) {
 }
 
 int main() {
-    
-    bool res = doWork(filter, 1000);
+    bool res = doWork(filter, 1000, true);
     std::cout << res << std::endl;
 
-    bool res2 = doWork(filter, 1000, true);
+    bool res2 = doWork(filter, 1000);
     std::cout << res2 << std::endl;
+
+
     return 0;
 }
