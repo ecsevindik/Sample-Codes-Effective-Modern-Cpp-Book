@@ -14,29 +14,34 @@ wait calls.
 
 using namespace std::literals;
 
-int doAsyncWork(int sleepms) {
-    std::cout << "Async work performed - " << sleepms << std::endl;
+int doAsyncWork(int sleepms) noexcept {
+    std::cout << "Async work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 10;
 }
 
-int doDeferredWork(int sleepms) {
-    std::cout << "Deferred work performed - " << sleepms << std::endl;
+int doDeferredWork(int sleepms) noexcept {
+    std::cout << "Deferred work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 5;
 }
 
-void test1() {
+void launchPolicyTest() {
+    std::cout << "launchPolicyTest" << std::endl;
     auto def1 = std::async(std::launch::deferred, doDeferredWork, 10);
     auto fut1 = std::async(std::launch::async, doAsyncWork, 10);
 
     std::cout << def1.get() << std::endl;
     std::cout << fut1.get() << std::endl;
+
+    std::cout << std::endl;
 }
 
-void test2() {
+void statusTest() {
+    std::cout << "statusTest" << std::endl;
+
     auto fut2 = std::async(doAsyncWork, 10);
-    if(fut2.wait_for(0s) == std::future_status::deferred) {
+    if(fut2.wait_for(0s) == std::future_status::deferred) { // get status of async work from future
         std::cout << fut2.get() << std::endl;
     } else {
         while(fut2.wait_for(5ms) != std::future_status::ready) {
@@ -44,6 +49,8 @@ void test2() {
         }
         std::cout << fut2.get() << std::endl;
     }
+
+    std::cout << std::endl;
 }
 
 template < typename F, typename... Ts>
@@ -54,17 +61,19 @@ reallyAsync(F&& f, Ts&&... params) {
                       std::forward<Ts>(params)...);
 }
 
-void test3() {
+void templatizedAsyncCallTest() {
+    std::cout << "templatizedAsyncCallTest" << std::endl;
     auto fut = reallyAsync(doAsyncWork, 10);
     std::cout << "Waiting for async work to finish" << std::endl;
     std::cout << fut.get() << std::endl;
+    std::cout << std::endl;
 }
 
 int main() {
     
-    test1();
-    test2();
-    test3();
+    launchPolicyTest();
+    statusTest();
+    templatizedAsyncCallTest();
 
     return 0;
 }

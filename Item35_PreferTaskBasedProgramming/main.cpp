@@ -25,8 +25,8 @@ int doDeferredWork(int sleepms) noexcept {
 }
 
 int main() {
-    auto fut = std::async(doAsyncWork, 40);
-    auto fut2 = std::async(doAsyncWork, 20);
+    auto fut = std::async(doAsyncWork, 40); // default launch parameter which is (std::launch::async | std::lauch::deferred)
+    auto fut2 = std::async(doAsyncWork, 20); // ditto
     std::cout << "fut2 returns " << fut2.get() << std::endl;
 
     auto def1 = std::async(std::launch::deferred, doDeferredWork, 10);
