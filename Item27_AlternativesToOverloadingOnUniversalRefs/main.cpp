@@ -40,15 +40,15 @@ void logAndAdd(T&& name) {
     );
 }
 
-void test1() {
-    std::string petName("Darla");
-    logAndAdd(petName);
-    logAndAdd(std::string("Persephone"));
-    logAndAdd("Patty Dog");
-    logAndAdd(22);
+void tagDispatchTest() {
+    std::string petName("Darla"); 
+    logAndAdd(petName); // calls false type
+    logAndAdd(std::string("Persephone")); // calls false type
+    logAndAdd("Patty Dog"); // calls false type
+    logAndAdd(22); // calls true type
 
     short x = 3;
-    logAndAdd(x);
+    logAndAdd(x); // calls true type
 }
 
 // TYPE TRAITS
@@ -59,11 +59,19 @@ public:
         typename =  std::enable_if_t<
                         !std::is_base_of<Person,std::decay_t<T>>::value // Prevents calling with Person or SpecialPerson
                         &&
-                        !std::is_integral<std::remove_reference_t<T>>::value // Prevents calling with soth, long, int types
+                        !std::is_integral<std::remove_reference_t<T>>::value // Prevents calling with short, long, int types
                     >
         >
     explicit Person(T&& n) // perfect forwarding ctor;
-    : name(std::forward<T>(n)) {} // initializes data member
+    : name(std::forward<T>(n)) { // initializes data member
+    
+        // assert that a std::string can be created from a T object
+        static_assert(
+            std::is_constructible<std::string, T>::value,
+            "Parameter n can't be used to construct a std::string"
+        );
+
+    } 
     
     explicit Person(int idx) // int ctor
     : name(std::to_string(idx)) {}
@@ -72,12 +80,20 @@ private:
     std::string name;
 };
 
-void test2() {
-    Person p1("Nancy");
-    auto cloneOfP1(p1);
+class Widget{
+public:
+    Widget() = default;
+};
 
-    Person p2(5);
-    auto cloneOfP2(p2);
+void ctorTest() {
+    Person p1("Nancy"); // calls perfect forwarding ctor
+    auto cloneOfP1(p1); // calls compiler generated copy constructor
+
+    Person p2(5); // calls int ctor
+    auto cloneOfP2(p2); // calls compiler generated copy constructor
+
+    // Widget w;
+    // Person p3(w); // static assertion fails here
 }
 
 class SpecialPerson : public Person {
@@ -92,8 +108,8 @@ public:
 };
 
 int main() {
-    test1();
-    test2();
+    tagDispatchTest();
+    ctorTest();
 
     return 0;
 }
