@@ -56,38 +56,67 @@ using namespace std;
 
 class Widget {
 public:
-    Widget(int x) : m_x(x) {};
+    Widget(int x) : m_x(x) {
+        std::cout << "Widget constructor called with x = " << m_x << std::endl;
+    };
     ~Widget() {std::cout << "Widget destructor is called " << m_x << std::endl;}
 
     Widget(Widget&& rhs)
-    : m_x(std::move(rhs.m_x)){ m_x += 5;}
+    : m_x(std::move(rhs.m_x)) { 
+        std::cout << "Widget move constructor called" << std::endl;
+        m_x += 5;
+    }
+
+    Widget& operator=(Widget&& rhs)
+    { 
+        m_x = std::move(rhs.m_x);
+        std::cout << "Widget move assignment called" << std::endl;
+        m_x += 5;
+        return *this;
+    }
+
+    Widget(const Widget& rhs)
+    : m_x(rhs.m_x) { 
+        std::cout << "Widget copy constructor called" << std::endl;
+        m_x += 5;
+    }
+
+    Widget& operator=(const Widget& rhs)
+    { 
+        m_x = rhs.m_x;
+        std::cout << "Widget copy assignment called" << std::endl;
+        m_x += 5;
+        return *this;
+    }
 
 private:
     int m_x;
 };
 
-void WidgetConsumer(Widget&& w) {
+void WidgetConsumer(Widget&& w) { // w is rvalue ref
     Widget wC(std::move(w));
     std::cout << "Widget consumed" << std::endl;
 }
 
-void test1(){
-    Widget var1(1);
-    Widget&& var2 = Widget(2);
+void rvalueRefTest(){
+    Widget var1(1); // Calls constructor
+    Widget&& var2 = Widget(2); // Class constructor, type of var2 is Widget&& but var2 itself is an lvalue
     
     WidgetConsumer(std::move(var1));
+    WidgetConsumer(std::move(var2));
     std::cout << "End of test1" << std::endl;
-}
+
+} // destructor of var1 and var2 is called at this point although they are moved.
 
 void randomFunc(int x, std::string y) {
-    std::cout << "Random function called with x=" << x << " | y=" << y << std::endl;
+    std::cout << "\nRandom function called with x = " << x << " | y = " << y << std::endl;
 }
 
-void test2() {
-    auto randomFuncCaller = [](auto&& func, auto&&... params) {
-        std::forward<decltype(func)>(func)( // invoke func
-        std::forward<decltype(params)>(params)... // on params
-        );
+void universalRefTest() {
+    auto randomFuncCaller = [](auto&& func, auto&&... params) { // func is universal ref, params is a parameter pack act like universal ref
+        std::forward<decltype(func)>(func)( // invoke func on params
+            std::forward<decltype(params)>(params)...
+            );
     };
 
     randomFuncCaller(randomFunc, 3, "helloe");
@@ -95,8 +124,8 @@ void test2() {
 
 int main() {
 
-    test1();
-    test2();
+    rvalueRefTest();
+    universalRefTest();
 
     return 0;
 }

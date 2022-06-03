@@ -25,7 +25,7 @@ void process(const std::string& lvalArg) {
 }
 
 void process(std::string&& rvalArg) {
-    auto s = std::move(rvalArg);
+    auto s = std::move(rvalArg); // rvalArg is not available after this point
     std::cout << s << std::endl;
 }
 
@@ -83,7 +83,7 @@ private:
 std::size_t Widget1::moveCtorCalls = 0;
 std::size_t Widget2::moveCtorCalls = 0;
 
-void test2() {
+void moveCtorTest() {
     Widget1 w1_1;
 
     Widget1 w1_2(std::move(w1_1));
@@ -99,7 +99,7 @@ void test2() {
 int main() {
 
     forwardTest();
-    test2();
+    moveCtorTest();
 
     return 0;
 }
