@@ -12,14 +12,14 @@ most of these issues for you.
 
 #include "Chronometer.h"
 
-int doAsyncWork(int sleepms) {
-    std::cout << "Async work performed - " << sleepms << std::endl;
+int doAsyncWork(int sleepms) noexcept {
+    std::cout << "Async work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 10;
 }
 
-int doDeferredWork(int sleepms) {
-    std::cout << "Deferred work performed - " << sleepms << std::endl;
+int doDeferredWork(int sleepms) noexcept {
+    std::cout << "Deferred work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 5;
 }
@@ -27,7 +27,7 @@ int doDeferredWork(int sleepms) {
 int main() {
     auto fut = std::async(doAsyncWork, 40);
     auto fut2 = std::async(doAsyncWork, 20);
-    std::cout << fut2.get() << std::endl;
+    std::cout << "fut2 returns " << fut2.get() << std::endl;
 
     auto def1 = std::async(std::launch::deferred, doDeferredWork, 10);
     auto def2 = std::async(std::launch::deferred, doDeferredWork, 20);
