@@ -22,13 +22,15 @@ void fwd1(Ts&&... params) {
 }
 
 // Braced initializers
-void test1(){
+void bracedInitializerTest(){
+  std::cout << "bracedInitializerTest" << std::endl; 
   f1({1,2,3});
   // fwd1({1,2,3}); // Does not compiles since compiler cannot deduce correct type from {1,2,3}
 
   auto vec = {4,5,6}; // auto deduce the type as std::initializer_list<int>
   fwd1(vec); // Compiles since type is explicitly defined
 
+  std::cout << std::endl;
 }
 
 class Widget {
@@ -48,9 +50,15 @@ void fwd2(Ts&&... params) {
   f2(std::forward<Ts>(params)...);
 }
 
-void test2() {
-  f2(Widget::MinVals);
-  // fwd2(Widget::MinVals); // With gcc compiler, this does not link since it requires references to MinVals which is not defined here. However, it works with Clang 12.0.0 compiler.
+void declarationOnlyStaticConstDataMemberTest() {
+
+  std::cout << "declarationOnlyStaticConstDataMemberTest" << std::endl;
+
+  f2(Widget::MinVals); // Compilers work around the missing definition by plopping the value 28 into all places where MinVals is mentioned.
+
+  // fwd2(Widget::MinVals); // With gcc compiler, this does not link since it requires references to MinVals which is not defined here. However, it works with Clang compiler.
+  
+  std::cout << std::endl;
 }
 
 void f3(int pf(int)){
@@ -65,15 +73,20 @@ void fwd3(Ts&&... params) {
   f3(std::forward<Ts>(params)...);
 }
 
-void test3(){
+void functionOverloadingTest(){
+
+  std::cout << "functionOverloadingTest" << std::endl;
+
   f3(processVal);
   // fwd3(processVal); // Does not compile since it does not know which overloaded processVal function to use.
 
-  using ProcessFucType = int (*)(int);
+  // Workaround
+  using ProcessFuncType = int (*)(int);
+  ProcessFuncType processValPtr = processVal;
+  fwd3(processValPtr); // fine
+  fwd3(static_cast<ProcessFuncType>(processVal)); // also fine
 
-  ProcessFucType processValPtr = processVal;
-
-  fwd3(processValPtr);
+  std::cout << std::endl;
 }
 
 struct IPv4Header {
@@ -84,7 +97,9 @@ std::uint32_t version:4,
               totalLength:16;
 };
 
-void test4(){
+void bitfieldsTest(){
+  std::cout << "bitfieldsTest" << std::endl;
+
   IPv4Header h;
   h.totalLength =3;
 
@@ -92,15 +107,18 @@ void test4(){
 
   // fwd2(h.totalLength); // Does not compile since bitfields do not have references, it is forbidden
 
+  // Workaround
   auto length = static_cast<std::uint16_t>(h.totalLength);
   fwd2(length);
+
+  std::cout << std::endl;
 }
 
 int main() {
 
-    test1();
-    test2();
-    test3();
-    test4();
+    bracedInitializerTest();
+    declarationOnlyStaticConstDataMemberTest();
+    functionOverloadingTest();
+    bitfieldsTest();
     return 0;
 }
