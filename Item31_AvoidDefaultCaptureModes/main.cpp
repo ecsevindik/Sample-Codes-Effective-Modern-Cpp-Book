@@ -13,7 +13,9 @@ and it misleadingly suggests that lambdas are self-contained.
 
 using FuncContainer = std::vector<std::function<void(int)>>;
 
-void test1() {
+void lambdaFuncTest() {
+    std::cout << "lambdaFuncTest" << std::endl;
+
     FuncContainer funcs;
 
     funcs.emplace_back([](int value) {std::cout << value << std::endl;});
@@ -24,6 +26,8 @@ void test1() {
         f(value);
         value++;
     }
+
+    std::cout << std::endl;
 }
 
 void addDivisor(FuncContainer& container) {
@@ -33,13 +37,15 @@ void addDivisor(FuncContainer& container) {
 }
 
 void addDivisorStatic(FuncContainer& container) {
-    static int divisor = 5;
-    container.emplace_back([=](int value) {std::cout << value/divisor << std::endl;}); // captures nothing, refers to above static
-    container.emplace_back([&](int value) {std::cout << (value*2)/divisor << std::endl;}); // captures nothing, refers to above static
-    divisor *= 5;
+    static int divisor_static = 5;
+    container.emplace_back([=](int value) {std::cout << value/divisor_static << std::endl;}); // captures nothing, refers to above static
+    container.emplace_back([&](int value) {std::cout << (value*2)/divisor_static << std::endl;}); // captures nothing, refers to above static
+    divisor_static *= 5;
 }
 
-void test2() {
+void captureModeTest() {
+
+    std::cout << "captureModeTest" << std::endl;
     FuncContainer funcs;
     addDivisor(funcs);
     int value = 5;
@@ -50,11 +56,13 @@ void test2() {
 
     funcs.clear();
     
-    addDivisorStatic(funcs);
+    addDivisorStatic(funcs); // After this line divisor_static becomes 25, and lambdas use 25 as divisor
     for(auto& f : funcs) {
         f(value);
         value*=2;
     }
+
+    std::cout << std::endl;
 }
 
 template<typename C>
@@ -69,11 +77,16 @@ void workWithContainer(const C& container) {
     }
 }
 
-void test3() {
+void lambdaFuncTest2() {
+
+    std::cout << "lambdaFuncTest2" << std::endl;
+
     std::vector<int> nums(2,5);
     workWithContainer(nums);
     nums[1] = 3;
     workWithContainer(nums);
+
+    std::cout << std::endl;
 }
 
 class Widget {
@@ -100,7 +113,7 @@ class Widget {
 
     void addFunc3(FuncContainer& funcs) const {
         auto divisorCopy = divisor;
-        funcs.emplace_back([divisorCopy] (int value) {std::cout << value/divisorCopy << std::endl;}); 
+        funcs.emplace_back([divisorCopy] (int value) {std::cout << value/divisorCopy << std::endl;}); // solution
     }
 
     void addFunc4(FuncContainer& funcs) const {
@@ -111,25 +124,30 @@ private:
     int divisor = 5;
 };
 
-void test4() {
+void danglingRefTest() {
+    std::cout << "danglingRefTest" << std::endl;
     FuncContainer funcs;
-    Widget w;
-    w.addFunc(funcs);
-    w.addFunc2(funcs);
-    w.addFunc3(funcs);
-    w.addFunc4(funcs);
+    {
+        Widget w;
+        w.addFunc(funcs); // This adds lambda with dangling divisor at the end of the scope. It outputs 0 in debug mode, works in release mode
+        w.addFunc2(funcs); // This adds lambda with dangling divisor at the end of the scope. It outputs 0 in debug mode, 1 in release mode, which are wrong
+        w.addFunc3(funcs); // fine
+        w.addFunc4(funcs); // best way
+    }
     int value = 5;
     for(auto& f : funcs) {
         f(value);
         value*=2;
     }
+
+    std::cout << std::endl;
 }
 
 int main() {
 
-    test1();
-    test2();
-    test3();
-    test4();
+    lambdaFuncTest();
+    captureModeTest();
+    lambdaFuncTest2();
+    danglingRefTest();
     return 0;
 }
