@@ -27,6 +27,7 @@ int main() {
         vecI.emplace_back("xx");
     }
     vecI.clear();
+    
     for(int i = 0; i < 1000; ++i) {
         vecE.push_back("xx");
     }
