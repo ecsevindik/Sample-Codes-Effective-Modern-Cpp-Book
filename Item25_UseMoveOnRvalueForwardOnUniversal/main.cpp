@@ -16,7 +16,7 @@ using namespace std;
 
 class DummyClass {
 public:
-    DummyClass() =default;
+    DummyClass() : m_x(0) {};
     ~DummyClass() = default;
 
     DummyClass(DummyClass&& rhs)
@@ -43,9 +43,17 @@ public:
         return *this;
     }
 
+    void dumFunc(int d) {}
+
 private:
     int m_x;
 };
+
+template < typename T>
+DummyClass callDum(T&& dummy){
+    dummy.dumFunc(3);
+    return std::forward<T>(dummy);
+}
 
 class Widget {
 public:
@@ -70,9 +78,13 @@ int main() {
 
     DummyClass cls;
     Widget w1;
-    w1.setClass(cls);
+    w1.setClass(cls); // cls becomes lvalue ref, calls copy assignment inside setClass func
     Widget w2;
-    w2.setClass(std::move(cls));
+    w2.setClass(std::move(cls)); // cls becomes rvalue ref, calls move assignment inside setClass func
+
+    DummyClass cls2;
+    callDum(cls2); // calls copy constructor inside callDum func
+    auto cl3 = callDum(std::move(cls2)); // calls move constructor inside callDum func
 
     std::string str = "Bart";
     w1.setString(std::move(str));
