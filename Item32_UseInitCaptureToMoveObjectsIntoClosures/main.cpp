@@ -30,7 +30,10 @@ private:
 };
 
 // Valid for C++14 or newer
-void test1() {
+void initCaptureTest() {
+
+    std::cout << "initCaptureTest" << std::endl;
+
     auto pw = std::make_unique<Widget>(true, false, true);
 
     auto func = [pw = std::move(pw)] { return pw->isValidated() && pw->isArchived(); };
@@ -38,11 +41,13 @@ void test1() {
 
     auto func2 = [pw = std::make_unique<Widget>(true, false, false)] { return pw->isValidated() && pw->isProcessed(); };
     std::cout << func2() << std::endl;
+
+    std::cout << std::endl;
 }
 
 // C++11 way to do same thing
-class IsValAndArch { // "is validated
-public: // and archived"
+class IsValAndArch { // "is validated and archived"
+public:
     using DataType = std::unique_ptr<Widget>;
     explicit IsValAndArch(DataType&& ptr)
     : pw(std::move(ptr)) {} // use of std::move
@@ -53,13 +58,19 @@ private:
     DataType pw;
 };
 
-void test2() {
+void initCaptureCPP11Version() {
+    std::cout << "initCaptureCPP11Version" << std::endl;
+
     auto func = IsValAndArch(std::make_unique<Widget>(true, false, true));
     std::cout << func() << std::endl;
+
+    std::cout << std::endl;
 }
 
-// C++11 way to do same thing
-void test3() {
+// C++11 way to do same thing with bind
+void bindTest() {
+
+    std::cout << "bindTest" << std::endl;
     std::vector<double> data(3, 0.5);
 
     auto func1 = std::bind([](std::vector<double>& data) { // Bind object stores copies of all the arguments
@@ -74,7 +85,7 @@ void test3() {
 
     func2();
 
-    auto func3 = std::bind([](const std::vector<double>& data) {
+    auto func3 = std::bind([](const std::vector<double>& data) { // C++11 emulation of init capture
             for(auto& d : data) {
                 std::cout << d << " - ";
             }
@@ -82,11 +93,13 @@ void test3() {
         }, std::move(data));
 
     func3();
+
+    std::cout << std::endl;
 }
 
 int main() {
-    test1();
-    test2();
-    test3();
+    initCaptureTest();
+    initCaptureCPP11Version();
+    bindTest();
     return 0;
 }
