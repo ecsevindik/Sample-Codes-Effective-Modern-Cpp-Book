@@ -25,7 +25,8 @@ void process(const std::string& lvalArg) {
 }
 
 void process(std::string&& rvalArg) {
-    std::cout << rvalArg << std::endl;
+    auto s = std::move(rvalArg);
+    std::cout << s << std::endl;
 }
 
 template < typename T>
@@ -34,13 +35,22 @@ void logAndProcess(T&& param) {
     process(std::forward<T>(param));
 }
 
+void forwardTest() {
+    std::string st1 = "Scott";
+    std::string st2 = "Meyers";
+
+    logAndProcess(st1);
+    logAndProcess(std::move(st2));
+    std::cout << st2 << std::endl; // At this point, st2 is no longer available since it is moved to another object in PROCESS function
+}
+
 // Same classes with different move operation
 class Widget1 {
-    public:
+public:
     Widget1() = default;
     ~Widget1() = default;
 
-    Widget1(Widget1&& rhs) 
+    Widget1(Widget1&& rhs)  // uconventional, undesirable implementation
     : s(std::forward<std::string>(rhs.s)){
         ++moveCtorCalls;
     }
@@ -58,7 +68,7 @@ class Widget2 {
     ~Widget2() = default;
     
     Widget2(Widget2&& rhs) 
-    : s(std::move(rhs.s)){
+    : s(std::move(rhs.s)){ // requires less typing than std::forward
         moveCtorCalls = rhs.moveCtorCalls;
         ++moveCtorCalls;
     }
@@ -70,14 +80,6 @@ private:
     std::string s;
 };
 
-void test1() {
-    std::string st1 = "Scott";
-    std::string st2 = "Meyers";
-
-    logAndProcess(st1);
-    logAndProcess(std::move(st2));
-}
-
 std::size_t Widget1::moveCtorCalls = 0;
 std::size_t Widget2::moveCtorCalls = 0;
 
@@ -85,18 +87,18 @@ void test2() {
     Widget1 w1_1;
 
     Widget1 w1_2(std::move(w1_1));
-    w1_2.print();
+    w1_2.print(); // one time move
 
     Widget2 w2_1;
     Widget2 w2_2(std::move(w2_1));
     Widget2 w2_3(std::move(w2_2));
 
-    w2_3.print();
+    w2_3.print(); // two times move operation
 }
 
 int main() {
 
-    test1();
+    forwardTest();
     test2();
 
     return 0;
