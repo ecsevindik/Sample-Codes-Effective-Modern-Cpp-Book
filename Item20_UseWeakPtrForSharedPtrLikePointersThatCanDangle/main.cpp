@@ -15,7 +15,7 @@ using namespace std;
 class Widget {
 public:
     Widget(int id) : m_id(id) {}
-    ~Widget() { std::cout << "Widget " << m_id << " destructor called" << std::endl;};
+    ~Widget() noexcept { std::cout << "Widget " << m_id << " destructor called" << std::endl;};
 
 private:
     int m_id;

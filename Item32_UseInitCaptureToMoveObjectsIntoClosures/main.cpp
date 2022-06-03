@@ -1,15 +1,13 @@
 
-/**
+/*
 • Use C++14’s init capture to move objects into closures.
 • In C++11, emulate init capture via hand-written classes or std::bind.
  */
 
+#include <iostream>
 #include <vector>
 #include <functional>
-#include <algorithm>
 #include <memory>
-
-#include "Chronometer.h"
 
 class Widget {
 public:

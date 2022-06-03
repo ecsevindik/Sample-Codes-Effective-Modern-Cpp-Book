@@ -1,15 +1,15 @@
 
-/**
+/*
 • Lambdas are more readable, more expressive, and may be more efficient than
 using std::bind.
 • In C++11 only, std::bind may be useful for implementing move capture or
 for binding objects with templatized function call operators.
  */
 
+#include <iostream>
+#include <chrono>
 #include <vector>
 #include <functional>
-
-#include "Chronometer.h"
 
 using namespace std::chrono;
 using namespace std::literals;

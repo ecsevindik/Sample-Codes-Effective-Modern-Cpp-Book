@@ -1,15 +1,14 @@
 
-/**
+/*
 • Default by-reference capture can lead to dangling references.
 • Default by-value capture is susceptible to dangling pointers (especially this),
 and it misleadingly suggests that lambdas are self-contained.
  */
 
+#include <iostream>
 #include <vector>
 #include <functional>
 #include <algorithm>
-
-#include "Chronometer.h"
 
 using FuncContainer = std::vector<std::function<void(int)>>;
 

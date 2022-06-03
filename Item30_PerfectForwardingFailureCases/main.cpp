@@ -1,4 +1,3 @@
-
 /*
 • Perfect forwarding fails when template type deduction fails or when it deduces
 the wrong type.

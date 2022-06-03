@@ -5,19 +5,18 @@
 via std::async blocks until the task completes.
  */
 
+#include <iostream>
 #include <future>
-
-#include "Chronometer.h"
 
 using namespace std::literals;
 
-int doAsyncWork(int sleepms) {
+int doAsyncWork(int sleepms) noexcept {
     std::cout << "Async work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 10;
 }
 
-int doDeferredWork(int sleepms) {
+int doDeferredWork(int sleepms)  noexcept {
     std::cout << "Deferred work performing - " << sleepms << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds{sleepms});
     return 5;

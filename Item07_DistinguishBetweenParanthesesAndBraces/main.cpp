@@ -78,7 +78,7 @@ public:
         std::cout << "Copy constructor is called" << std::endl;
     }
 
-    Widget(Widget&& rhs) {
+    Widget(Widget&& rhs) noexcept {
         std::cout << "Move constructor is called" << std::endl;
     }
 

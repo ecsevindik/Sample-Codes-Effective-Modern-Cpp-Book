@@ -30,9 +30,8 @@ function does it all.
 
 */
 
+#include <iostream>
 #include <array>
-
-#include "Chronometer.h"
 
 namespace ecs {
 
@@ -46,7 +45,7 @@ constexpr int pow(int base, int exp) noexcept // C++14
 
 }
 
-void test1() {
+void constexprFuncTest() {
     constexpr auto numConds = 5;
     std::array<int, ecs::pow(3, numConds)> results; // pow provides compile-time constant since inputs are also ctc.
 
@@ -96,7 +95,7 @@ constexpr Point reflection(const Point& p) noexcept
     return result; // return copy of it
 }
 
-void test2() {
+void constexprClassTest() {
     constexpr Point p1(9.4, 27.7); // fine, "runs" constexpr ctor during compilation
     constexpr Point p2(28.8, 5.3); // also fine
     constexpr auto mid = midpoint(p1, p2); // init constexpr object w/result of constexpr function
@@ -108,7 +107,8 @@ void test2() {
 }
 
 int main() {
-    test1();
-    test2();
+    constexprFuncTest();
+    constexprClassTest();
+    
     return 0;
 }

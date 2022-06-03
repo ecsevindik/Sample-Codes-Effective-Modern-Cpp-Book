@@ -1,5 +1,5 @@
 
-/**
+/*
 • The std::thread API offers no direct way to get return values from asynchronously
 run functions, and if those functions throw, the program is terminated.
 • Thread-based programming calls for manual management of thread exhaustion,
@@ -8,9 +8,8 @@ oversubscription, load balancing, and adaptation to new platforms.
 most of these issues for you.
  */
 
+#include <iostream>
 #include <future>
-
-#include "Chronometer.h"
 
 int doAsyncWork(int sleepms) noexcept {
     std::cout << "Async work performing - " << sleepms << std::endl;

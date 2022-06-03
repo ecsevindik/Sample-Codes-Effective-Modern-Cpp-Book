@@ -1,11 +1,10 @@
 
-/**
+/*
 • Use decltype on auto&& parameters to std::forward them.
  */
 
+#include <iostream>
 #include <vector>
-
-#include "Chronometer.h"
 
 template<typename T>
 T normalize1(T x) {

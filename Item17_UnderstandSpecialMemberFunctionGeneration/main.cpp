@@ -41,8 +41,7 @@ copy operations, move operations, or destructor.
 */
 
 #include <atomic>
-
-#include "Chronometer.h"
+#include <iostream>
 
 class Widget {
 public:

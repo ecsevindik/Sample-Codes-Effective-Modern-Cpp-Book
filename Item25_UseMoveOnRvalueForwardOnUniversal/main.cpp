@@ -19,12 +19,12 @@ public:
     DummyClass() : m_x(0) {};
     ~DummyClass() = default;
 
-    DummyClass(DummyClass&& rhs)
+    DummyClass(DummyClass&& rhs) noexcept
     : m_x(std::move(rhs.m_x)) { 
         std::cout << "DummyClass move constructor called" << std::endl;
     }
 
-    DummyClass& operator=(DummyClass&& rhs)
+    DummyClass& operator=(DummyClass&& rhs) noexcept
     { 
         m_x = std::move(rhs.m_x);
         std::cout << "DummyClass move assigment called" << std::endl;

@@ -61,13 +61,13 @@ public:
     };
     ~Widget() {std::cout << "Widget destructor is called " << m_x << std::endl;}
 
-    Widget(Widget&& rhs)
+    Widget(Widget&& rhs) noexcept
     : m_x(std::move(rhs.m_x)) { 
         std::cout << "Widget move constructor called" << std::endl;
         m_x += 5;
     }
 
-    Widget& operator=(Widget&& rhs)
+    Widget& operator=(Widget&& rhs) noexcept
     { 
         m_x = std::move(rhs.m_x);
         std::cout << "Widget move assignment called" << std::endl;
@@ -93,7 +93,7 @@ private:
     int m_x;
 };
 
-void WidgetConsumer(Widget&& w) { // w is rvalue ref
+void WidgetConsumer(Widget&& w) noexcept { // w is rvalue ref
     Widget wC(std::move(w));
     std::cout << "Widget consumed" << std::endl;
 }

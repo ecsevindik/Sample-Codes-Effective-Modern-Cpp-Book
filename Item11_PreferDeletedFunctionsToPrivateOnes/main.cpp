@@ -27,7 +27,7 @@ bool isLucky(char) = delete;
 bool isLucky(bool) = delete;
 bool isLucky(double) = delete;
 
-void test1() {
+void overloadDeleteTest() {
     isLucky(3);
     // isLucky(true); // Does not compile since its overload is deleted, uncomment to see the error
     // isLucky('a'); // ditto
@@ -67,7 +67,7 @@ public:
 template<>
 void Widget::processPointer<char>(char*) = delete;
 
-void test2() {
+void templateOverloadTest() {
     Widget w;
 
     int x = 3;
@@ -78,7 +78,7 @@ void test2() {
 }
 
 int main() {
-    test1();
-    test2();
+    overloadDeleteTest();
+    templateOverloadTest();
     return 0;
 }

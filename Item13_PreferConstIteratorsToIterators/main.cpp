@@ -20,7 +20,7 @@ namespace ecs {
     }
 }
 
-void test1() {
+void findAndInsertTest() {
     std::vector<int> values{1, 2100, 1983, 3, 2010};
 
     auto it = std::find(values.cbegin(), values.cend(), 1983);
@@ -45,7 +45,7 @@ void findAndInsert( C& container, // in container, find first occurrence of targ
     container.insert(it, insertVal);
 }
 
-void test2() {
+void templatizedFindAndInsertTest() {
     std::vector<int> values{1, 2100, 3, 2010, 1983};
     findAndInsert(values, 1983, 1998);
 
@@ -56,7 +56,7 @@ void test2() {
 }
 
 int main() {
-    test1();
-    test2();
+    findAndInsertTest();
+    templatizedFindAndInsertTest();
     return 0;
 }

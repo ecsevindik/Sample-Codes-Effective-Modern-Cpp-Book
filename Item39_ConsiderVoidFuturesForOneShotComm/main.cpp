@@ -1,5 +1,5 @@
 
-/**
+/*
 • For simple event communication, condvar-based designs require a superfluous
 mutex, impose constraints on the relative progress of detecting and reacting
 tasks, and require reacting tasks to verify that the event has taken place.
@@ -11,9 +11,8 @@ mechanism is somewhat stilted.
 heap memory for shared states, and it’s limited to one-shot communication.
  */
 
+#include <iostream>
 #include <future>
-
-#include "Chronometer.h"
 
 using namespace std::literals;
 

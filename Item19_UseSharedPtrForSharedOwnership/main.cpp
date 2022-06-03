@@ -74,7 +74,7 @@ std::shared_ptr<Investment> makeInvestment(InvestmentType type, Ts&&... params) 
     return nullptr;
 }
 
-void test1() {
+void customDelTest() {
     auto invt1 = makeInvestmentWithCustomDel(InvestmentType::Bond, 3);
     {
         auto invt2 = makeInvestmentWithCustomDel(InvestmentType::Stock, 4);
@@ -84,7 +84,7 @@ void test1() {
     auto invt4 = makeInvestment(InvestmentType::Bond, 3);
 }
 
-void test2() {
+void seperateCustomDelTest() {
 
     auto customDel1 = [](Investment* inv) {
         std::cout << "Custom del 1  -  " << inv->m_x << std::endl;
@@ -107,8 +107,8 @@ void test2() {
 
 int main() {
 
-    test1();
-    test2();
+    customDelTest();
+    seperateCustomDelTest();
     
     return 0;
 }

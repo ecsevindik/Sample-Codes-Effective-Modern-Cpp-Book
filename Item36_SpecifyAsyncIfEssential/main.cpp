@@ -1,5 +1,5 @@
 
-/**
+/*
 • The default launch policy for std::async permits both asynchronous and
 synchronous task execution.
 • This flexibility leads to uncertainty when accessing thread_locals, implies
@@ -8,9 +8,8 @@ wait calls.
 • Specify std::launch::async if asynchronous task execution is essential.
  */
 
+#include <iostream>
 #include <future>
-
-#include "Chronometer.h"
 
 using namespace std::literals;
 

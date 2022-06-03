@@ -1,5 +1,5 @@
 
-/**
+/*
 • In principle, emplacement functions should sometimes be more efficient than
 their insertion counterparts, and they should never be less efficient.
 • In practice, they’re most likely to be faster when (1) the value being added is
@@ -75,9 +75,6 @@ int main() {
     }
     chronometer.Stop();
     chronometer.Report("Emplacement of rvalue to occupied index");
-
-
-    
 
     return 0;
 }

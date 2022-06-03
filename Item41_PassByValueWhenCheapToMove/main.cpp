@@ -1,5 +1,5 @@
 
-/**
+/*
 • For copyable, cheap-to-move parameters that are always copied, pass by value
 may be nearly as efficient as pass by reference, it’s easier to implement, and it
 can generate less object code.

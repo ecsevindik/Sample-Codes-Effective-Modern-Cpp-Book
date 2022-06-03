@@ -8,7 +8,6 @@ size of std::unique_ptr objects.
 • Converting a std::unique_ptr to a std::shared_ptr is easy.
  */
 
-
 #include <string>
 #include <iostream>
 #include <memory>

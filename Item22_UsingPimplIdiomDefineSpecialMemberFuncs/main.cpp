@@ -1,5 +1,5 @@
 
-/**
+/*
 • The Pimpl Idiom decreases build times by reducing compilation dependencies
 between class clients and class implementations.
 • For std::unique_ptr pImpl pointers, declare special member functions in
