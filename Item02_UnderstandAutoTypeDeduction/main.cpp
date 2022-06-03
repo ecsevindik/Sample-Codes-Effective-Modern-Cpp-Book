@@ -7,6 +7,8 @@ izer_list, and template type deduction doesn’t.
 deduction, not auto type deduction.
  */
 
+#include <functional>
+
 #include "TypeDeduction.h"
 
 /*  NOTES
@@ -56,6 +58,9 @@ int main() {
 
     auto y = {27};
 
+    int dd = 300;
+    auto func3 = std::bind([](int data){ return data;}, std::move(dd));
+
     std::cout << "x = " << x << " and its type = " << type_id_with_cvr<decltype(x)>().pretty_name() << std::endl << std::endl;
     std::cout << "cx = " << cx << " and its type = " << type_id_with_cvr<decltype(cx)>().pretty_name() << std::endl << std::endl;
     std::cout << "rx = " << rx << " and its type = " << type_id_with_cvr<decltype(rx)>().pretty_name() << std::endl << std::endl;
@@ -67,6 +72,7 @@ int main() {
     std::cout << "arr2 = " << arr2 << " and its type = " << type_id_with_cvr<decltype(arr2)>().pretty_name() << std::endl << std::endl;
     std::cout << "func1's type = " << type_id_with_cvr<decltype(func1)>().pretty_name() << std::endl << std::endl;
     std::cout << "func2's type = " << type_id_with_cvr<decltype(func2)>().pretty_name() << std::endl << std::endl;
+    std::cout << "func3's type = " << type_id_with_cvr<decltype(func3)>().pretty_name() << std::endl << std::endl;
     std::cout << "y's type = " << type_id_with_cvr<decltype(y)>().pretty_name() << std::endl << std::endl;
 
     return 0;
