@@ -21,11 +21,12 @@ enum class Sound { Beep, Siren, Whistle };
 enum class Volume { Normal, Loud, LoudPlusPlus };
 
 void SetAlarm1(Time t, Sound s, Duration d) {
-    std::cout << "Setalarm1 is called" << std::endl;
+    std::cout << "SetAlarm1 is called" << std::endl;
     return;
 }
-void test1() {
+void lambdaAndBindTest() {
 
+    std::cout << "lambdaAndBindTest" << std::endl;
     // Lambda implementation
     auto setSoundL = [](Sound s) {
         SetAlarm1(steady_clock::now() + 1h, s, 30s);
@@ -33,23 +34,27 @@ void test1() {
 
     // Bind implementation
     auto setSoundBWrong = std::bind(SetAlarm1, steady_clock::now() + 1h, _1, 30s); // Wrong because steady_clock evaluated when bind is called.
-    auto setSoundB = std::bind(SetAlarm1, std::bind(std::plus<>(), steady_clock::now(), 1h), _1, 30s);
+    auto setSoundB = std::bind(SetAlarm1, std::bind(std::plus<>(), steady_clock::now(), 1h), _1, 30s); // Workaround
 
     setSoundL(Sound::Beep);
     setSoundB(Sound::Siren);
+
+    std::cout << std::endl;
 }
 
 void SetAlarm2(Time t, Sound s, Duration d) {
-    std::cout << "Setalarm2-3 is called" << std::endl;
+    std::cout << "SetAlarm2-3 is called" << std::endl;
     return;
 }
 
 void SetAlarm2(Time t, Sound s, Duration d, Volume v) {
-    std::cout << "Setalarm2-4 is called" << std::endl;
+    std::cout << "SetAlarm2-4 is called" << std::endl;
     return;
 }
 
-void test2() {
+void overloadingTest() {
+
+    std::cout << "overloadingTest" << std::endl;
 
     // Lambda implementation
     auto setSoundL = [](Sound s) {
@@ -63,6 +68,7 @@ void test2() {
     // Bind implementation
     // auto setSoundB = std::bind(SetAlarm2, std::bind(std::plus<>(), steady_clock::now(), 1h), _1, 30s); // gives compile error due to function overload
 
+    // Workaround
     using SetAlarm3ParamType = void(*)(Time t, Sound s, Duration d);
     auto setSoundB = std::bind( static_cast<SetAlarm3ParamType>(SetAlarm2), 
                                 std::bind(std::plus<>(), 
@@ -71,10 +77,12 @@ void test2() {
     setSoundL(Sound::Beep);
     setSoundL4(Sound::Whistle);
     setSoundB(Sound::Siren);
+    
+    std::cout << std::endl;
 }
 
 int main() {
-    test1();
-    test2();
+    lambdaAndBindTest();
+    overloadingTest();
     return 0;
 }
