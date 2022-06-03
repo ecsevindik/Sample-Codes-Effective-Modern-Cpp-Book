@@ -29,14 +29,14 @@ void logAndAdd(int idx) {
     names.emplace(std::to_string(idx));
 }
 
-void test1() {
+void overloadingFuncTest() {
     std::string petName("Darla");
-    logAndAdd(petName);
-    logAndAdd(std::string("Persephone"));
-    logAndAdd("Patty Dog");
-    logAndAdd(22);
+    logAndAdd(petName); // calss template one
+    logAndAdd(std::string("Persephone")); // calss template one
+    logAndAdd("Patty Dog"); // calls template one
+    logAndAdd(22); // calls int one
 
-    short x = 3;
+    // short x = 3;
     // logAndAdd(x); // This one calls the template one since it does not exactly match with the overload taking int. That's why it doesn't compile. Uncomment it to see the compilation error.
 }
 
@@ -53,7 +53,7 @@ private:
     std::string name;
 };
 
-void test2() {
+void forwardingCtorTest() {
     Person p("Nancy");
     // auto cloneOfP(p); // Since p is not const, forwarding ctor is called which result in compilation error.
 
@@ -74,8 +74,8 @@ void test2() {
 // };
 
 int main() {
-    test1();
-    test2();
+    overloadingFuncTest();
+    forwardingCtorTest();
 
     return 0;
 }
