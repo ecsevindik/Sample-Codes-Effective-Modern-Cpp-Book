@@ -6,3 +6,12 @@ Codes are tested both on Ubuntu 20.04 and Windows 10.
     * CMake
     * Compiler (gcc or clang)
     * Boost
+
+## Compilation and Run on Linux
+```bash
+mkdir build
+cd build
+cmake ..
+make -j 4
+./<Item-Name>/<Item-Exe-Name>
+```
