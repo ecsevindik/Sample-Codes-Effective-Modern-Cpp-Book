@@ -89,7 +89,7 @@ int main() {
     // Convert unique_ptr to shared_ptr
     std::shared_ptr<Investment> sp = makeInvestmentWithCustomDel(InvestmentType::RealEstate, 5);
 
-    auto invt3 = makeInvestment(InvestmentType::Bond, 3); // This line will not print anything since it is not defined with custom del
+    auto invt3 = makeInvestment(InvestmentType::Bond, 6); // This line will not print anything since it is not defined with custom del
 
     return 0;
 }

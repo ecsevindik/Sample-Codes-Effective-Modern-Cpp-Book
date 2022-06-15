@@ -52,7 +52,8 @@ void captureModeTest() {
         f(value);
         value*=2;
     }
-
+    // value is 20 here
+    
     funcs.clear();
     
     addDivisorStatic(funcs); // After this line divisor_static becomes 25, and lambdas use 25 as divisor

@@ -81,7 +81,7 @@ void customDelTest() {
         auto invt3 = invt2;
     }
 
-    auto invt4 = makeInvestment(InvestmentType::Bond, 3);
+    auto invt4 = makeInvestment(InvestmentType::Bond, 5);
 }
 
 void seperateCustomDelTest() {
@@ -117,7 +117,7 @@ int main() {
 
 std::vector<std::shared_ptr<Widget>> processedWidgets;
 
-class Widget: public std::enable_shared_from_this<Widget> {
+class Widget {
 public:
     …
     void process();

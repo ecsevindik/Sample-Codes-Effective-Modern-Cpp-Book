@@ -79,6 +79,8 @@ int main() {
     std::unique_ptr<Base> upb = std::make_unique<Widget>();
     upb->doWork(); // Calls derived class doSomething
 
+    std::make_unique<Widget>()->doSomething(); // Calls derived class doSometing & function
+
     Widget w;
     w.doSomething(); // Calls doSomething &
 

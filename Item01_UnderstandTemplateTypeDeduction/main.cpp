@@ -93,7 +93,7 @@ void arrayArguments() {
     const char name[] = "J. P. Briggs"; // name's type is const char[13]
     const char * ptrToName = name; // array decays to pointer
     getTypeByValue(name); // name is array, but T deduced as const char*
-    getTypeByValue(ptrToName);
+    getTypeByValue(ptrToName); // ditto
 
     std::cout << "Array size = " << arraySize(name) << std::endl;
 }

@@ -89,6 +89,7 @@ int main() {
     std::string str = "Bart";
     w1.setString(std::move(str));
     std::cout << str << std::endl; // Expected to console out empty or throw exception
+    std::cout << "End of test" << std::endl;
 
     return 0;
 }

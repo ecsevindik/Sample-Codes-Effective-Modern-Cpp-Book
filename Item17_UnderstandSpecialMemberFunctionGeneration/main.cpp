@@ -15,7 +15,7 @@
  */
 
 /*
-The C++11 rules governing the special member functions are thus:
+The C++11/14 rules governing the special member functions are thus:
 
 • Default constructor: Same rules as C++98. Generated only if the class contains
 no user-declared constructors.

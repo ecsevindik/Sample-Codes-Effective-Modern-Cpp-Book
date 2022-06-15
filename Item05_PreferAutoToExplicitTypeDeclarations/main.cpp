@@ -57,7 +57,7 @@ int main() {
     
     // for(std::pair<std::string, int>& p : m) {} // Error since each pair in m has a type of std::pair<const std::string, int>
     for(const std::pair<std::string, int>& p : m) { // This causes compiler to create reference to a temp object by copying from std::pair<const std::string, int> to const std::pair<std::string, int>
-        std::cout << p.second << std::endl; // That temp object will be out of scope at the end
+        std::cout << p.first << "-" << p.second << std::endl; // That temp object will be out of scope at the end
     }
 
     for(auto& p: m) { // using auto prevents such problems

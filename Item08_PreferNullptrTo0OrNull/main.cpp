@@ -14,9 +14,9 @@ public:
     Widget() = default;
 };
 
-int f1(std::shared_ptr<Widget> spw) { return 1;} // call these only when
-double f2(std::unique_ptr<Widget> upw) { return 2.0;} // the appropriate
-bool f3(Widget* pw) { return false;} // mutex is locked
+int f1(std::shared_ptr<Widget> spw) { return 1;}        // call these only when
+double f2(std::unique_ptr<Widget> upw) { return 2.0;}   // the appropriate
+bool f3(Widget* pw) { return false;}                    // mutex is locked
 
 void withMutexTest() {
     std::mutex f1m, f2m, f3m; // mutexes for f1, f2, and f3

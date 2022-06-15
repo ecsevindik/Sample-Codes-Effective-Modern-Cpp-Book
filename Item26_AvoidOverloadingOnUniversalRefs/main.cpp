@@ -31,8 +31,8 @@ void logAndAdd(int idx) {
 
 void overloadingFuncTest() {
     std::string petName("Darla");
-    logAndAdd(petName); // calss template one
-    logAndAdd(std::string("Persephone")); // calss template one
+    logAndAdd(petName); // calls template one
+    logAndAdd(std::string("Persephone")); // calls template one
     logAndAdd("Patty Dog"); // calls template one
     logAndAdd(22); // calls int one
 

@@ -66,6 +66,8 @@ void templatizedAsyncCallTest() {
     std::cout << "Waiting for async work to finish" << std::endl;
     std::cout << fut.get() << std::endl;
     std::cout << std::endl;
+
+    auto fut2 = reallyAsync([](int x){std::cout << x << std::endl;}, 3);
 }
 
 int main() {

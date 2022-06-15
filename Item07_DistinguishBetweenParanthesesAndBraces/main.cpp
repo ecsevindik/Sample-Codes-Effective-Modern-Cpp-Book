@@ -107,6 +107,6 @@ int main() {
     Widget w10(w4); // uses parens, calls copy ctor
     Widget w11{w4}; // uses braces, calls std::initializer_list ctor (w4 converts to float, and float converts to long double)
     Widget w12(std::move(w4)); // uses parens, calls move ctor
-    Widget w13{std::move(w5)}; // uses braces, calls std::initializer_list ctor (for same reason as w6)
+    Widget w13{std::move(w5)}; // uses braces, calls std::initializer_list ctor (for same reason as w11)
     return 0;
 }
